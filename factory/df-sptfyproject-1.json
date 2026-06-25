@@ -1,0 +1,15 @@
+{
+	"name": "df-sptfyproject-1",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "8aba3a2d-9e48-44fe-9178-e115c4d09ba0",
+		"tenantId": "6e413e83-9359-45a1-9169-dc669d34aaea"
+	}
+}
