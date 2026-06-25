@@ -7,7 +7,7 @@
   },
   {
      "schema":"dbo",
-     "table" :"DimTable",
+     "table" :"DimTrack",
      "cdc_column" :"updated_at",
      "from_date" : ""
   },
