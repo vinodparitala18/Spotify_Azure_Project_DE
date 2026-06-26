@@ -43,7 +43,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "select * from @{item().schema}.@{item().table} where @{item().cdc_column} > '@{if(empty(item().from_date),activity('Last_cdc').output.value[0].cdc_timestamp,item().from_date)}'",
+										"value": "select * from @{item().schema}.@{item().table} where @{item().cdc_col} > '@{if(empty(item().from_date),activity('Last_cdc').output.value[0].cdc_timestamp,item().from_date)}'",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -81,11 +81,11 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@pipeline().parameters.table",
+											"value": "@{item().table}_cdc",
 											"type": "Expression"
 										},
 										"file": {
-											"value": "@concat(pipeline().parameters.table,'_',variables('current'))",
+											"value": "@concat(item().table,'_',variables('current'))",
 											"type": "Expression"
 										}
 									}
@@ -262,7 +262,7 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@item().table",
+														"value": "@{item().table}_cdc",
 														"type": "Expression"
 													},
 													"file": "empty.json"
@@ -276,7 +276,7 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@item().table",
+														"value": "@{item().table}_cdc",
 														"type": "Expression"
 													},
 													"file": {
@@ -308,7 +308,7 @@
 												{
 													"type": "Query",
 													"text": {
-														"value": "select max(@{item().cdc_column}) as cdc_timestamp from @{item().schema}.@{item().table}",
+														"value": "select max(@{item().cdc_col}) as cdc_timestamp from @{item().schema}.@{item().table}",
 														"type": "Expression"
 													}
 												}
@@ -321,6 +321,34 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-25.centralindia.logic.azure.com:443/workflows/9620d45a74af41b49d86e5c9b46f6d23/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=X01ndAFNjhFTfkX5BAs3S_5Utk8IXp7vsPVTOdiK1wg",
+					"body": {
+						"value": "{\n    \"pipeline_name\":@{pipeline().Pipeline},\n    \"pipeline_ID\":@{pipeline().RunId}\n}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -330,31 +358,31 @@
 					{
 						"schema": "dbo",
 						"table": "DimUser",
-						"cdc_column": "updated_at",
+						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
 						"schema": "dbo",
-						"table": "DimTable",
-						"cdc_column": "updated_at",
+						"table": "DimTrack",
+						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
 						"schema": "dbo",
 						"table": "DimDate",
-						"cdc_column": "updated_at",
+						"cdc_col": "date",
 						"from_date": ""
 					},
 					{
 						"schema": "dbo",
 						"table": "DimArtist",
-						"cdc_column": "updated_at",
+						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
 						"schema": "dbo",
 						"table": "FactStream",
-						"cdc_column": "updated_at",
+						"cdc_col": "stream_timestamp",
 						"from_date": ""
 					}
 				]
