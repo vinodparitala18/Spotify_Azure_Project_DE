@@ -329,7 +329,8 @@
 					{
 						"activity": "ForEach1",
 						"dependencyConditions": [
-							"Succeeded"
+							"Succeeded",
+							"Failed"
 						]
 					}
 				],
@@ -345,7 +346,7 @@
 					"method": "POST",
 					"url": "https://prod-25.centralindia.logic.azure.com:443/workflows/9620d45a74af41b49d86e5c9b46f6d23/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=X01ndAFNjhFTfkX5BAs3S_5Utk8IXp7vsPVTOdiK1wg",
 					"body": {
-						"value": "{\n    \"pipeline_name\":@{pipeline().Pipeline},\n    \"pipeline_ID\":@{pipeline().RunId}\n}",
+						"value": "{\n    \"pipeline_name\": \"@{pipeline().Pipeline}\",\n    \"pipeline_runID\": \"@{pipeline().RunId}\"\n}",
 						"type": "Expression"
 					}
 				}
