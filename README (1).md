@@ -1,4 +1,4 @@
-# End-to-End Data Engineering Project — Azure Medallion Lakehouse
+# Spotify 🟢〰  End-to-End Data Engineering Project — Azure Medallion Lakehouse
 
 An end-to-end, production-style data engineering pipeline built on Azure, implementing incremental **Change Data Capture (CDC)** ingestion from Azure SQL Database into a **Bronze → Silver → Gold** medallion lakehouse, orchestrated with Azure Data Factory and processed with Databricks (PySpark, Delta Live Tables, Structured Streaming), governed by Unity Catalog, and deployed via Databricks Asset Bundles + GitHub CI/CD.
 
